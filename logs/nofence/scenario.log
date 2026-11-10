@@ -1,0 +1,16 @@
+2026-11-10 16:45:23.873 [scenario] подготовка: /hw4/nofence очищен, указатель /hw4/nofence/result создан (версия 0), FENCING=0, пауза после 24 чанков на 40 с
+2026-11-10 16:45:23.876 [scenario] запущен coord-A, pid 7722
+2026-11-10 16:45:24.878 [scenario] запущен coord-B, pid 7726
+2026-11-10 16:45:28.265 [scenario] SIGSTOP лидеру coord-A (pid 7722, эпоха 1) после 24 готовых чанков
+2026-11-10 16:45:39.851 [scenario] ZooKeeper: лидер теперь coord-B (эпоха 2), через 11.59 с после SIGSTOP
+2026-11-10 16:46:08.305 [scenario] пауза 40.0 с; coord-B завершился с кодом 0, версия указателя 1
+2026-11-10 16:46:08.305 [scenario] SIGCONT лидеру coord-A: процесс продолжает работу с места остановки
+2026-11-10 16:46:09.073 [scenario] coord-A завершился, код 0
+2026-11-10 16:46:09.074 [scenario] coord-B завершился, код 0
+2026-11-10 16:46:09.076 [scenario] указатель /hw4/nofence/result: версия 2, записал coord-A (эпоха 1), s3://hh-lake/hw4/nofence/result-coord-A-epoch1.csv, пар 23204, вхождений 121358
+2026-11-10 16:46:09.076 [scenario] строк «записал результат»: 2; строк BadVersionError: 0
+2026-11-10 16:46:09.076 [scenario]   2026-11-10 16:46:08.891 [coord-A pid=7722] записал результат: /hw4/nofence/result -> s3://hh-lake/hw4/nofence/result-coord-A-epoch1.csv, версия указателя 2
+2026-11-10 16:46:09.076 [scenario]   2026-11-10 16:45:44.726 [coord-B pid=7726] записал результат: /hw4/nofence/result -> s3://hh-lake/hw4/nofence/result-coord-B-epoch2.csv, версия указателя 1
+2026-11-10 16:46:09.078 [scenario] смена лидера по журналам: SIGSTOP 16:45:28.265 -> coord-B «стал лидером» 16:45:39.840, 11.57 с
+2026-11-10 16:46:09.083 [scenario]   s3://hh-lake/hw4/nofence/result-coord-A-epoch1.csv 821711 байт
+2026-11-10 16:46:09.083 [scenario]   s3://hh-lake/hw4/nofence/result-coord-B-epoch2.csv 821711 байт

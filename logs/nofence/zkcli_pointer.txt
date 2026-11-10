@@ -1,0 +1,30 @@
+$ zkCli.sh -server $ZK_ALL get -s /hw4/nofence/result
+{"result": "s3://hh-lake/hw4/nofence/result-coord-A-epoch1.csv", "sha256": "f073918f0709a7cb407b6899d3e147bebc09b1aa0e5d61d9a2a25bb05da71ed0", "pairs": 23204, "occurrences": 121358, "by": "coord-A", "epoch": 1, "at": "2026-11-10T16:46:08.882"}
+cZxid = 0x30000001e
+ctime = Tue Nov 10 16:45:23 MSK 2026
+mZxid = 0x30000006a
+mtime = Tue Nov 10 16:46:08 MSK 2026
+pZxid = 0x30000001e
+cversion = 0
+dataVersion = 2
+aclVersion = 0
+ephemeralOwner = 0x0
+dataLength = 243
+numChildren = 0
+
+$ zkCli.sh -server $ZK_ALL get -s /hw4/nofence/epoch
+coord-B
+cZxid = 0x30000001d
+ctime = Tue Nov 10 16:45:23 MSK 2026
+mZxid = 0x300000041
+mtime = Tue Nov 10 16:45:39 MSK 2026
+pZxid = 0x30000001d
+cversion = 0
+dataVersion = 2
+aclVersion = 0
+ephemeralOwner = 0x0
+dataLength = 7
+numChildren = 0
+
+$ zkCli.sh -server $ZK_ALL ls /hw4/nofence/checkpoint
+[chunk-00000, chunk-00001, chunk-00002, chunk-00003, chunk-00004, chunk-00005, chunk-00006, chunk-00007, chunk-00008, chunk-00009, chunk-00010, chunk-00011, chunk-00012, chunk-00013, chunk-00014, chunk-00015, chunk-00016, chunk-00017, chunk-00018, chunk-00019, chunk-00020, chunk-00021, chunk-00022, chunk-00023, chunk-00024, chunk-00025, chunk-00026, chunk-00027, chunk-00028, chunk-00029, chunk-00030, chunk-00031, chunk-00032, chunk-00033, chunk-00034, chunk-00035, chunk-00036, chunk-00037, chunk-00038, chunk-00039, chunk-00040, chunk-00041, chunk-00042, chunk-00043, chunk-00044, chunk-00045, chunk-00046, chunk-00047, chunk-00048, chunk-00049, chunk-00050]

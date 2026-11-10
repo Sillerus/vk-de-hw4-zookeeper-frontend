@@ -1,0 +1,19 @@
+{
+ "run": "failover3",
+ "fencing": 1,
+ "leader": "coord-A",
+ "backup": "coord-B",
+ "failover_s": 11.182,
+ "pointer_version": 1,
+ "pointer": {
+  "result": "s3://hh-lake/hw4/failover3/result-coord-B-epoch2.csv",
+  "sha256": "f073918f0709a7cb407b6899d3e147bebc09b1aa0e5d61d9a2a25bb05da71ed0",
+  "pairs": 23204,
+  "occurrences": 121358,
+  "by": "coord-B",
+  "epoch": 2,
+  "at": "2026-11-10T16:48:50.480"
+ },
+ "wrote": 1,
+ "bad_version": 1
+}

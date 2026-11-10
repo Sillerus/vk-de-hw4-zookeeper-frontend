@@ -1,0 +1,16 @@
+2026-11-10 16:47:45.343 [scenario] подготовка: /hw4/failover2 очищен, указатель /hw4/failover2/result создан (версия 0), FENCING=1, пауза после 24 чанков на 40 с
+2026-11-10 16:47:45.344 [scenario] запущен coord-A, pid 7977
+2026-11-10 16:47:46.354 [scenario] запущен coord-B, pid 7981
+2026-11-10 16:47:49.365 [scenario] SIGSTOP лидеру coord-A (pid 7977, эпоха 1) после 24 готовых чанков
+2026-11-10 16:47:59.878 [scenario] ZooKeeper: лидер теперь coord-B (эпоха 2), через 10.51 с после SIGSTOP
+2026-11-10 16:48:29.368 [scenario] пауза 40.0 с; coord-B завершился с кодом 0, версия указателя 1
+2026-11-10 16:48:29.368 [scenario] SIGCONT лидеру coord-A: процесс продолжает работу с места остановки
+2026-11-10 16:48:30.039 [scenario] coord-A завершился, код 0
+2026-11-10 16:48:30.039 [scenario] coord-B завершился, код 0
+2026-11-10 16:48:30.041 [scenario] указатель /hw4/failover2/result: версия 1, записал coord-B (эпоха 2), s3://hh-lake/hw4/failover2/result-coord-B-epoch2.csv, пар 23204, вхождений 121358
+2026-11-10 16:48:30.041 [scenario] строк «записал результат»: 1; строк BadVersionError: 1
+2026-11-10 16:48:30.041 [scenario]   2026-11-10 16:48:04.532 [coord-B pid=7981] записал результат: /hw4/failover2/result -> s3://hh-lake/hw4/failover2/result-coord-B-epoch2.csv, версия указателя 1 (проверка эпохи 2 пройдена)
+2026-11-10 16:48:30.041 [scenario]   2026-11-10 16:48:29.875 [coord-A pid=7977] BadVersionError: запись результата отклонена, моя эпоха 1, текущая эпоха 2; вторая операция транзакции (set указателя) не применена: RuntimeInconsistency
+2026-11-10 16:48:30.043 [scenario] смена лидера по журналам: SIGSTOP 16:47:49.365 -> coord-B «стал лидером» 16:47:59.836, 10.47 с
+2026-11-10 16:48:30.050 [scenario]   s3://hh-lake/hw4/failover2/result-coord-A-epoch1.csv 821711 байт
+2026-11-10 16:48:30.051 [scenario]   s3://hh-lake/hw4/failover2/result-coord-B-epoch2.csv 821711 байт

@@ -1,0 +1,139 @@
+=== 1. Запуск трёх серверов
+
+[16:44:05] $ ZK 1 start
+ZooKeeper JMX enabled by default
+Using config: /opt/hw4-zk/zk1/bin/../conf/zoo.cfg
+Starting zookeeper ... STARTED
+
+[16:44:06] $ ZK 2 start
+ZooKeeper JMX enabled by default
+Using config: /opt/hw4-zk/zk2/bin/../conf/zoo.cfg
+Starting zookeeper ... STARTED
+
+[16:44:07] $ ZK 3 start
+ZooKeeper JMX enabled by default
+Using config: /opt/hw4-zk/zk3/bin/../conf/zoo.cfg
+Starting zookeeper ... STARTED
+
+[16:44:15] $ status_all
+--- zk1 (порт 2181)
+Client port found: 2181. Client address: localhost. Client SSL: false.
+Mode: follower
+--- zk2 (порт 2182)
+Client port found: 2182. Client address: localhost. Client SSL: false.
+Mode: leader
+--- zk3 (порт 2183)
+Client port found: 2183. Client address: localhost. Client SSL: false.
+Mode: follower
+
+[16:44:16] $ ps -o pid=,args= -C java | grep QuorumPeerMain | sed -E 's|^ *([0-9]+) ([^ ]+java) .* ([^ ]+zoo.cfg)$|pid \1  \2  \3|'
+pid 5818  /usr/lib/jvm/java-17-openjdk-amd64/bin/java  /opt/hw4-zk/zk1/bin/../conf/zoo.cfg
+pid 5880  /usr/lib/jvm/java-17-openjdk-amd64/bin/java  /opt/hw4-zk/zk2/bin/../conf/zoo.cfg
+pid 5958  /usr/lib/jvm/java-17-openjdk-amd64/bin/java  /opt/hw4-zk/zk3/bin/../conf/zoo.cfg
+
+[16:44:16] $ for p in 2181 2182 2183; do echo "--- $p"; echo srvr | nc -q 2 127.0.0.1 $p | grep -E "version|Mode|Zxid|Node count"; done
+--- 2181
+Zookeeper version: 3.9.6-a355171b081b5b60749db8f19cca1528b0df936f, built on 2026-09-03 19:29 UTC
+Zxid: 0x0
+Mode: follower
+Node count: 5
+--- 2182
+Zookeeper version: 3.9.6-a355171b081b5b60749db8f19cca1528b0df936f, built on 2026-09-03 19:29 UTC
+Zxid: 0x100000000
+Mode: leader
+Node count: 5
+--- 2183
+Zookeeper version: 3.9.6-a355171b081b5b60749db8f19cca1528b0df936f, built on 2026-09-03 19:29 UTC
+Zxid: 0x100000000
+Mode: follower
+Node count: 5
+
+[16:44:22] $ CLI $ZK_ALL create /hw4-ensemble "created with 3 servers"
+Created /hw4-ensemble
+
+[16:44:23] $ CLI 127.0.0.1:2183 get /hw4-ensemble
+created with 3 servers
+
+лидер: zk2
+
+=== 2. Остановка одного сервера (останавливаю лидера zk2)
+
+[16:44:25] $ ZK 2 stop
+ZooKeeper JMX enabled by default
+Using config: /opt/hw4-zk/zk2/bin/../conf/zoo.cfg
+Stopping zookeeper ... STOPPED
+
+[16:44:30] $ status_all
+--- zk1 (порт 2181)
+Client port found: 2181. Client address: localhost. Client SSL: false.
+Mode: follower
+--- zk2 (порт 2182)
+Client port found: 2182. Client address: localhost. Client SSL: false.
+Error contacting service. It is probably not running.
+--- zk3 (порт 2183)
+Client port found: 2183. Client address: localhost. Client SSL: false.
+Mode: leader
+
+[16:44:31] $ CLI $ZK_ALL set /hw4-ensemble "updated with 2 of 3 servers"
+
+[16:44:32] $ CLI $ZK_ALL get /hw4-ensemble
+updated with 2 of 3 servers
+
+=== 3. Остановка второго сервера (zk3), работает только один из трёх
+
+[16:44:33] $ ZK 3 stop
+ZooKeeper JMX enabled by default
+Using config: /opt/hw4-zk/zk3/bin/../conf/zoo.cfg
+Stopping zookeeper ... STOPPED
+
+[16:44:38] $ status_all
+--- zk1 (порт 2181)
+Client port found: 2181. Client address: localhost. Client SSL: false.
+Error contacting service. It is probably not running.
+--- zk2 (порт 2182)
+Client port found: 2182. Client address: localhost. Client SSL: false.
+Error contacting service. It is probably not running.
+--- zk3 (порт 2183)
+Client port found: 2183. Client address: localhost. Client SSL: false.
+Error contacting service. It is probably not running.
+
+[16:44:40] $ echo srvr | nc -q 2 127.0.0.1 2181
+This ZooKeeper instance is not currently serving requests
+
+[16:44:42] $ ps -o pid,cmd -C java | grep -o 'zk[0-9]/conf/zoo.cfg' | sort -u
+
+[16:44:42] $ CLI_TIMEOUT=20 CLI 127.0.0.1:2181 get /hw4-ensemble; echo "код выхода: $?"
+org.apache.zookeeper.ClientCnxn$EndOfStreamException: Unable to read additional data from server sessionid 0x0, likely server has closed socket
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doIO(ClientCnxnSocketNIO.java:77)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:356)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1290)
+KeeperErrorCode = ConnectionLoss for /hw4-ensemble
+код выхода: 1
+
+=== 4. Повторный запуск остановленных серверов
+
+[16:44:42] $ ZK 2 start
+ZooKeeper JMX enabled by default
+Using config: /opt/hw4-zk/zk2/bin/../conf/zoo.cfg
+Starting zookeeper ... STARTED
+
+[16:44:43] $ ZK 3 start
+ZooKeeper JMX enabled by default
+Using config: /opt/hw4-zk/zk3/bin/../conf/zoo.cfg
+Starting zookeeper ... STARTED
+
+[16:44:52] $ status_all
+--- zk1 (порт 2181)
+Client port found: 2181. Client address: localhost. Client SSL: false.
+Mode: leader
+--- zk2 (порт 2182)
+Client port found: 2182. Client address: localhost. Client SSL: false.
+Mode: follower
+--- zk3 (порт 2183)
+Client port found: 2183. Client address: localhost. Client SSL: false.
+Mode: follower
+
+[16:44:53] $ CLI $ZK_ALL get /hw4-ensemble
+updated with 2 of 3 servers
+
+[16:44:54] $ CLI $ZK_ALL delete /hw4-ensemble

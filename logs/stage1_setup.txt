@@ -1,0 +1,50 @@
+$ java -version 2>&1 | head -1
+openjdk version "17.0.21.0.3" 2026-10-24
+$ echo JAVA_HOME=$JAVA_HOME
+JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+$ sha512sum apache-zookeeper-3.9.6-bin.tar.gz
+e999626df06de30dc8bb53bb51da9bb786b1658406adafc6b92f104d72ca25e869f70a57c83a726f8b9558cc0fb519fc20f201aa5d6da09884bc4be5fe6dd3b0  apache-zookeeper-3.9.6-bin.tar.gz
+$ rm -rf /opt/hw4-zk/zk1 && mkdir -p /opt/hw4-zk/zk1 && tar xzf apache-zookeeper-3.9.6-bin.tar.gz -C /opt/hw4-zk/zk1 --strip-components=1
+$ rm -rf /opt/hw4-zk/zk2 && mkdir -p /opt/hw4-zk/zk2 && tar xzf apache-zookeeper-3.9.6-bin.tar.gz -C /opt/hw4-zk/zk2 --strip-components=1
+$ rm -rf /opt/hw4-zk/zk3 && mkdir -p /opt/hw4-zk/zk3 && tar xzf apache-zookeeper-3.9.6-bin.tar.gz -C /opt/hw4-zk/zk3 --strip-components=1
+$ cp conf/zoo1.cfg /opt/hw4-zk/zk1/conf/zoo.cfg
+$ cp conf/logback.xml /opt/hw4-zk/zk1/conf/logback.xml
+$ mkdir -p /opt/hw4-zk/zk1/data && echo 1 > /opt/hw4-zk/zk1/data/myid
+$ cp conf/zoo2.cfg /opt/hw4-zk/zk2/conf/zoo.cfg
+$ cp conf/logback.xml /opt/hw4-zk/zk2/conf/logback.xml
+$ mkdir -p /opt/hw4-zk/zk2/data && echo 2 > /opt/hw4-zk/zk2/data/myid
+$ cp conf/zoo3.cfg /opt/hw4-zk/zk3/conf/zoo.cfg
+$ cp conf/logback.xml /opt/hw4-zk/zk3/conf/logback.xml
+$ mkdir -p /opt/hw4-zk/zk3/data && echo 3 > /opt/hw4-zk/zk3/data/myid
+$ ls $ZK_BASE $ZK_BASE/zk1
+/opt/hw4-zk:
+zk1
+zk2
+zk3
+
+/opt/hw4-zk/zk1:
+LICENSE.txt
+NOTICE.txt
+README.md
+README_packaging.md
+bin
+conf
+data
+docs
+lib
+$ for n in 1 2 3; do echo "zk$n/data/myid = $(cat $ZK_BASE/zk$n/data/myid)"; done
+zk1/data/myid = 1
+zk2/data/myid = 2
+zk3/data/myid = 3
+$ diff <(grep ^server $ZK_BASE/zk1/conf/zoo.cfg) <(grep ^server $ZK_BASE/zk2/conf/zoo.cfg) && diff <(grep ^server $ZK_BASE/zk1/conf/zoo.cfg) <(grep ^server $ZK_BASE/zk3/conf/zoo.cfg) && echo "строки server.N во всех трёх zoo.cfg одинаковые"
+строки server.N во всех трёх zoo.cfg одинаковые
+$ grep -H -E "^(dataDir|clientPort|admin.serverPort)" $ZK_BASE/zk*/conf/zoo.cfg
+/opt/hw4-zk/zk1/conf/zoo.cfg:dataDir=/opt/hw4-zk/zk1/data
+/opt/hw4-zk/zk1/conf/zoo.cfg:clientPort=2181
+/opt/hw4-zk/zk1/conf/zoo.cfg:admin.serverPort=8081
+/opt/hw4-zk/zk2/conf/zoo.cfg:dataDir=/opt/hw4-zk/zk2/data
+/opt/hw4-zk/zk2/conf/zoo.cfg:clientPort=2182
+/opt/hw4-zk/zk2/conf/zoo.cfg:admin.serverPort=8082
+/opt/hw4-zk/zk3/conf/zoo.cfg:dataDir=/opt/hw4-zk/zk3/data
+/opt/hw4-zk/zk3/conf/zoo.cfg:clientPort=2183
+/opt/hw4-zk/zk3/conf/zoo.cfg:admin.serverPort=8083

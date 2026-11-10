@@ -1,0 +1,94 @@
+$ FENCING=0 python scenario.py --run nofence --fencing 0
+2026-11-10 16:45:23.873 [scenario] подготовка: /hw4/nofence очищен, указатель /hw4/nofence/result создан (версия 0), FENCING=0, пауза после 24 чанков на 40 с
+2026-11-10 16:45:23.876 [scenario] запущен coord-A, pid 7722
+2026-11-10 16:45:24.878 [scenario] запущен coord-B, pid 7726
+2026-11-10 16:45:28.265 [scenario] SIGSTOP лидеру coord-A (pid 7722, эпоха 1) после 24 готовых чанков
+2026-11-10 16:45:39.851 [scenario] ZooKeeper: лидер теперь coord-B (эпоха 2), через 11.59 с после SIGSTOP
+2026-11-10 16:46:08.305 [scenario] пауза 40.0 с; coord-B завершился с кодом 0, версия указателя 1
+2026-11-10 16:46:08.305 [scenario] SIGCONT лидеру coord-A: процесс продолжает работу с места остановки
+2026-11-10 16:46:09.073 [scenario] coord-A завершился, код 0
+2026-11-10 16:46:09.074 [scenario] coord-B завершился, код 0
+2026-11-10 16:46:09.076 [scenario] указатель /hw4/nofence/result: версия 2, записал coord-A (эпоха 1), s3://hh-lake/hw4/nofence/result-coord-A-epoch1.csv, пар 23204, вхождений 121358
+2026-11-10 16:46:09.076 [scenario] строк «записал результат»: 2; строк BadVersionError: 0
+2026-11-10 16:46:09.076 [scenario]   2026-11-10 16:46:08.891 [coord-A pid=7722] записал результат: /hw4/nofence/result -> s3://hh-lake/hw4/nofence/result-coord-A-epoch1.csv, версия указателя 2
+2026-11-10 16:46:09.076 [scenario]   2026-11-10 16:45:44.726 [coord-B pid=7726] записал результат: /hw4/nofence/result -> s3://hh-lake/hw4/nofence/result-coord-B-epoch2.csv, версия указателя 1
+2026-11-10 16:46:09.078 [scenario] смена лидера по журналам: SIGSTOP 16:45:28.265 -> coord-B «стал лидером» 16:45:39.840, 11.57 с
+2026-11-10 16:46:09.083 [scenario]   s3://hh-lake/hw4/nofence/result-coord-A-epoch1.csv 821711 байт
+2026-11-10 16:46:09.083 [scenario]   s3://hh-lake/hw4/nofence/result-coord-B-epoch2.csv 821711 байт
+$ zkCli.sh -server $ZK_ALL get -s /hw4/nofence/result
+{"result": "s3://hh-lake/hw4/nofence/result-coord-A-epoch1.csv", "sha256": "f073918f0709a7cb407b6899d3e147bebc09b1aa0e5d61d9a2a25bb05da71ed0", "pairs": 23204, "occurrences": 121358, "by": "coord-A", "epoch": 1, "at": "2026-11-10T16:46:08.882"}
+cZxid = 0x30000001e
+ctime = Tue Nov 10 16:45:23 MSK 2026
+mZxid = 0x30000006a
+mtime = Tue Nov 10 16:46:08 MSK 2026
+pZxid = 0x30000001e
+cversion = 0
+dataVersion = 2
+aclVersion = 0
+ephemeralOwner = 0x0
+dataLength = 243
+numChildren = 0
+
+$ zkCli.sh -server $ZK_ALL get -s /hw4/nofence/epoch
+coord-B
+cZxid = 0x30000001d
+ctime = Tue Nov 10 16:45:23 MSK 2026
+mZxid = 0x300000041
+mtime = Tue Nov 10 16:45:39 MSK 2026
+pZxid = 0x30000001d
+cversion = 0
+dataVersion = 2
+aclVersion = 0
+ephemeralOwner = 0x0
+dataLength = 7
+numChildren = 0
+
+$ zkCli.sh -server $ZK_ALL ls /hw4/nofence/checkpoint
+[chunk-00000, chunk-00001, chunk-00002, chunk-00003, chunk-00004, chunk-00005, chunk-00006, chunk-00007, chunk-00008, chunk-00009, chunk-00010, chunk-00011, chunk-00012, chunk-00013, chunk-00014, chunk-00015, chunk-00016, chunk-00017, chunk-00018, chunk-00019, chunk-00020, chunk-00021, chunk-00022, chunk-00023, chunk-00024, chunk-00025, chunk-00026, chunk-00027, chunk-00028, chunk-00029, chunk-00030, chunk-00031, chunk-00032, chunk-00033, chunk-00034, chunk-00035, chunk-00036, chunk-00037, chunk-00038, chunk-00039, chunk-00040, chunk-00041, chunk-00042, chunk-00043, chunk-00044, chunk-00045, chunk-00046, chunk-00047, chunk-00048, chunk-00049, chunk-00050]
+$ FENCING=1 python scenario.py --run fencing --fencing 1
+2026-11-10 16:46:12.137 [scenario] подготовка: /hw4/fencing очищен, указатель /hw4/fencing/result создан (версия 0), FENCING=1, пауза после 24 чанков на 40 с
+2026-11-10 16:46:12.138 [scenario] запущен coord-A, pid 7837
+2026-11-10 16:46:13.139 [scenario] запущен coord-B, pid 7841
+2026-11-10 16:46:16.085 [scenario] SIGSTOP лидеру coord-A (pid 7837, эпоха 1) после 24 готовых чанков
+2026-11-10 16:46:27.880 [scenario] ZooKeeper: лидер теперь coord-B (эпоха 2), через 11.80 с после SIGSTOP
+2026-11-10 16:46:56.091 [scenario] пауза 40.0 с; coord-B завершился с кодом 0, версия указателя 1
+2026-11-10 16:46:56.091 [scenario] SIGCONT лидеру coord-A: процесс продолжает работу с места остановки
+2026-11-10 16:46:56.859 [scenario] coord-A завершился, код 0
+2026-11-10 16:46:56.859 [scenario] coord-B завершился, код 0
+2026-11-10 16:46:56.861 [scenario] указатель /hw4/fencing/result: версия 1, записал coord-B (эпоха 2), s3://hh-lake/hw4/fencing/result-coord-B-epoch2.csv, пар 23204, вхождений 121358
+2026-11-10 16:46:56.861 [scenario] строк «записал результат»: 1; строк BadVersionError: 1
+2026-11-10 16:46:56.861 [scenario]   2026-11-10 16:46:32.610 [coord-B pid=7841] записал результат: /hw4/fencing/result -> s3://hh-lake/hw4/fencing/result-coord-B-epoch2.csv, версия указателя 1 (проверка эпохи 2 пройдена)
+2026-11-10 16:46:56.861 [scenario]   2026-11-10 16:46:56.736 [coord-A pid=7837] BadVersionError: запись результата отклонена, моя эпоха 1, текущая эпоха 2; вторая операция транзакции (set указателя) не применена: RuntimeInconsistency
+2026-11-10 16:46:56.863 [scenario] смена лидера по журналам: SIGSTOP 16:46:16.085 -> coord-B «стал лидером» 16:46:27.839, 11.75 с
+2026-11-10 16:46:56.870 [scenario]   s3://hh-lake/hw4/fencing/result-coord-A-epoch1.csv 821711 байт
+2026-11-10 16:46:56.870 [scenario]   s3://hh-lake/hw4/fencing/result-coord-B-epoch2.csv 821711 байт
+$ zkCli.sh -server $ZK_ALL get -s /hw4/fencing/result
+{"result": "s3://hh-lake/hw4/fencing/result-coord-B-epoch2.csv", "sha256": "f073918f0709a7cb407b6899d3e147bebc09b1aa0e5d61d9a2a25bb05da71ed0", "pairs": 23204, "occurrences": 121358, "by": "coord-B", "epoch": 2, "at": "2026-11-10T16:46:32.596"}
+cZxid = 0x300000075
+ctime = Tue Nov 10 16:46:11 MSK 2026
+mZxid = 0x3000000b1
+mtime = Tue Nov 10 16:46:32 MSK 2026
+pZxid = 0x300000075
+cversion = 0
+dataVersion = 1
+aclVersion = 0
+ephemeralOwner = 0x0
+dataLength = 243
+numChildren = 0
+
+$ zkCli.sh -server $ZK_ALL get -s /hw4/fencing/epoch
+coord-B
+cZxid = 0x300000074
+ctime = Tue Nov 10 16:46:11 MSK 2026
+mZxid = 0x300000095
+mtime = Tue Nov 10 16:46:27 MSK 2026
+pZxid = 0x300000074
+cversion = 0
+dataVersion = 2
+aclVersion = 0
+ephemeralOwner = 0x0
+dataLength = 7
+numChildren = 0
+
+$ zkCli.sh -server $ZK_ALL ls /hw4/fencing/checkpoint
+[chunk-00000, chunk-00001, chunk-00002, chunk-00003, chunk-00004, chunk-00005, chunk-00006, chunk-00007, chunk-00008, chunk-00009, chunk-00010, chunk-00011, chunk-00012, chunk-00013, chunk-00014, chunk-00015, chunk-00016, chunk-00017, chunk-00018, chunk-00019, chunk-00020, chunk-00021, chunk-00022, chunk-00023, chunk-00024, chunk-00025, chunk-00026, chunk-00027, chunk-00028, chunk-00029, chunk-00030, chunk-00031, chunk-00032, chunk-00033, chunk-00034, chunk-00035, chunk-00036, chunk-00037, chunk-00038, chunk-00039, chunk-00040, chunk-00041, chunk-00042, chunk-00043, chunk-00044, chunk-00045, chunk-00046, chunk-00047, chunk-00048, chunk-00049, chunk-00050]

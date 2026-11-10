@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- logback.xml для трёх копий ZooKeeper 3.9.6.
+     В штатном файле включён только CONSOLE, а zkServer.sh при каждом старте
+     перезаписывает logs/*.out. Здесь добавлен FILE с дозаписью, чтобы журнал сервера
+     сохранял все перезапуски этапа 2. На консоль (и в вывод zkCli) идут только WARN и выше. -->
+<configuration>
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder><pattern>%d{ISO8601} [myid:%X{myid}] - %-5p [%t:%C{1}@%L] - %m%n</pattern></encoder>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter"><level>WARN</level></filter>
+  </appender>
+  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    <file>${zookeeper.log.dir:-.}/${zookeeper.log.file:-zookeeper.log}</file>
+    <append>true</append>
+    <encoder><pattern>%d{ISO8601} [myid:%X{myid}] - %-5p [%t:%C{1}@%L] - %m%n</pattern></encoder>
+  </appender>
+  <root level="INFO">
+    <appender-ref ref="CONSOLE" />
+    <appender-ref ref="FILE" />
+  </root>
+</configuration>

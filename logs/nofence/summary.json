@@ -1,0 +1,19 @@
+{
+ "run": "nofence",
+ "fencing": 0,
+ "leader": "coord-A",
+ "backup": "coord-B",
+ "failover_s": 11.575,
+ "pointer_version": 2,
+ "pointer": {
+  "result": "s3://hh-lake/hw4/nofence/result-coord-A-epoch1.csv",
+  "sha256": "f073918f0709a7cb407b6899d3e147bebc09b1aa0e5d61d9a2a25bb05da71ed0",
+  "pairs": 23204,
+  "occurrences": 121358,
+  "by": "coord-A",
+  "epoch": 1,
+  "at": "2026-11-10T16:46:08.882"
+ },
+ "wrote": 2,
+ "bad_version": 0
+}
